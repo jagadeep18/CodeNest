@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom"
 function UsersView() {
     const navigate = useNavigate()
     const { viewHeight } = useResponsive()
-    const { setStatus } = useAppContext()
+    const { setStatus, logout } = useAppContext()
     const { socket } = useSocket()
 
     const copyURL = async () => {
@@ -38,6 +38,7 @@ function UsersView() {
 
     const leaveRoom = () => {
         socket.disconnect()
+        logout()
         setStatus(USER_STATUS.DISCONNECTED)
         navigate("/", {
             replace: true,

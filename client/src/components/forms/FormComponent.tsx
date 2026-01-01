@@ -7,10 +7,11 @@ import { useAppContext } from '../../context/AppContext';
 import { useSocket } from '../../context/SocketContext';
 import { SocketEvent } from '../../types/socket';
 import { USER_STATUS } from '../../types/user';
+import GoogleLoginComponent from '../auth/GoogleLoginComponent';
 
 const FormComponent = () => {
     const location = useLocation();
-    const { currentUser, setCurrentUser, status, setStatus } = useAppContext();
+    const { currentUser, setCurrentUser, status, setStatus, isAuthenticated, authToken } = useAppContext();
     const { socket } = useSocket();
 
     const usernameRef = useRef<HTMLInputElement | null>(null);
@@ -88,9 +89,59 @@ const FormComponent = () => {
         }
     }, [currentUser, location.state?.redirect, navigate, setStatus, socket, status]);
 
+    // If user is authenticated, show authenticated view
+    if (isAuthenticated && authToken) {
+        return (
+            <div className="flex w-full max-w-[500px] flex-col items-center justify-center gap-4 p-4 sm:w-[500px] sm:p-8">
+                <img src={logo} alt="Logo" className="w-full" />
+                <div className="w-full rounded-md border border-gray-500 bg-darkHover p-4 text-center">
+                    <p className="mb-4 text-sm text-gray-400">Logged in as</p>
+                    <p className="mb-2 font-semibold">{currentUser.email}</p>
+                    <p className="text-sm text-gray-400">{currentUser.username}</p>
+                </div>
+                <form onSubmit={joinRoom} className="flex w-full flex-col gap-4">
+                    <input
+                        type="text"
+                        name="roomId"
+                        placeholder="Room Id"
+                        className="w-full rounded-md border border-gray-500 bg-darkHover px-3 py-3 focus:outline-none"
+                        onChange={handleInputChanges}
+                        value={currentUser.roomId}
+                    />
+                    <button
+                        type="submit"
+                        className="mt-2 w-full rounded-md bg-primary px-8 py-3 text-lg font-semibold text-black"
+                    >
+                        Join
+                    </button>
+                </form>
+                <button
+                    className="cursor-pointer select-none underline"
+                    onClick={createNewRoomId}
+                >
+                    Generate Unique Room Id
+                </button>
+            </div>
+        );
+    }
+
     return (
         <div className="flex w-full max-w-[500px] flex-col items-center justify-center gap-4 p-4 sm:w-[500px] sm:p-8">
             <img src={logo} alt="Logo" className="w-full" />
+            
+            {/* Google Login Section */}
+            <div className="w-full space-y-4">
+                <p className="text-center text-sm text-gray-400">Sign in with Google</p>
+                <GoogleLoginComponent />
+            </div>
+
+            <div className="flex w-full items-center gap-4">
+                <div className="flex-1 border-t border-gray-500"></div>
+                <span className="text-xs text-gray-500">OR</span>
+                <div className="flex-1 border-t border-gray-500"></div>
+            </div>
+
+            {/* Room-based Login Section */}
             <form onSubmit={joinRoom} className="flex w-full flex-col gap-4">
                 <input
                     type="text"

@@ -6,6 +6,9 @@ import { SocketEvent, SocketId } from "./types/socket"
 import { USER_CONNECTION_STATUS, User } from "./types/user"
 import { Server } from "socket.io"
 import path from "path"
+import { connectDB } from "./db/db"
+import authRoutes from "./routes/auth"
+import projectRoutes from "./routes/projects"
 
 dotenv.config()
 
@@ -14,6 +17,13 @@ const app = express()
 app.use(express.json())
 
 app.use(cors())
+
+// Connect to MongoDB
+connectDB()
+
+// API Routes
+app.use("/api/auth", authRoutes)
+app.use("/api/projects", projectRoutes)
 
 app.use(express.static(path.join(__dirname, "public"))) // Serve static files
 
@@ -49,7 +59,7 @@ function getRoomId(socketId: SocketId): string | null {
 function getUserBySocketId(socketId: SocketId): User | null {
 	const user = userSocketMap.find((user) => user.socketId === socketId)
 	if (!user) {
-		console.error("User not found for socket ID:", socketId)
+		console.error("User found for socket ID:", socketId)
 		return null
 	}
 	return user

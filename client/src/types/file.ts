@@ -13,6 +13,7 @@ interface FileSystemItem {
 
 interface FileContext {
     fileStructure: FileSystemItem
+    setFileStructure: (structure: FileSystemItem) => void
     openFiles: FileSystemItem[]
     activeFile: FileSystemItem | null
     setActiveFile: (file: FileSystemItem) => void

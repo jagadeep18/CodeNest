@@ -21,6 +21,11 @@ interface AppContext {
     setActivityState: (state: ACTIVITY_STATE) => void
     drawingData: DrawingData
     setDrawingData: (data: DrawingData) => void
+    authToken: string | null
+    setAuthToken: (token: string | null) => void
+    isAuthenticated: boolean
+    setIsAuthenticated: (authenticated: boolean) => void
+    logout: () => void
 }
 
 export { ACTIVITY_STATE }

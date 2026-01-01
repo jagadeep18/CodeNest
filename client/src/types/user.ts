@@ -6,6 +6,9 @@ enum USER_CONNECTION_STATUS {
 interface User {
     username: string
     roomId: string
+    email?: string
+    id?: string
+    profilePicture?: string
 }
 
 interface RemoteUser extends User {
@@ -23,6 +26,8 @@ enum USER_STATUS {
     JOINED = "joined",
     CONNECTION_FAILED = "connection-failed",
     DISCONNECTED = "disconnected",
+    AUTHENTICATED = "authenticated",
+    UNAUTHENTICATED = "unauthenticated",
 }
 
 export { USER_CONNECTION_STATUS, USER_STATUS, RemoteUser, User }

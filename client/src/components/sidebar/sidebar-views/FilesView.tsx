@@ -1,5 +1,7 @@
 import  { useState } from "react"
 import FileStructureView from "@/components/files/FileStructureView"
+import ProjectManager from "@/components/projects/ProjectManager"
+import UserProfile from "@/components/common/UserProfile"
 import { useFileSystem } from "@/context/FileContext"
 import useResponsive from "@/hooks/useResponsive"
 import { FileSystemItem } from "@/types/file"
@@ -10,7 +12,7 @@ import { v4 as uuidV4 } from "uuid"
 import { toast } from "react-hot-toast"
 
 function FilesView() {
-    const { downloadFilesAndFolders, updateDirectory } = useFileSystem()
+    const { downloadFilesAndFolders, updateDirectory, fileStructure } = useFileSystem()
     const { viewHeight } = useResponsive()
     const { minHeightReached } = useResponsive()
     const [isLoading, setIsLoading] = useState(false)
@@ -179,6 +181,13 @@ function FilesView() {
             style={{ height: viewHeight, maxHeight: viewHeight }}
         >
             <FileStructureView />
+            
+            {/* User Profile Section */}
+            <UserProfile />
+            
+            {/* Project Manager Section */}
+            <ProjectManager fileStructure={fileStructure} />
+            
             <div
                 className={cn(`flex min-h-fit flex-col justify-end pt-2`, {
                     hidden: minHeightReached,

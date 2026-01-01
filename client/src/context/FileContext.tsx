@@ -783,6 +783,7 @@ function FileContextProvider({ children }: { children: ReactNode }) {
         <FileContext.Provider
             value={{
                 fileStructure,
+                setFileStructure,
                 openFiles,
                 activeFile,
                 setActiveFile,
