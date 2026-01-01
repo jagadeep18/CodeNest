@@ -1,4 +1,4 @@
-![logo](https://github.com/user-attachments/assets/b4084019-8638-41c1-9bba-2ff74aab19eb)
+![logo](https://github.com/jagadeep18/dev-hub/blob/main/client/src/assets/logo.jpg)
 
 A collaborative, real-time code editor where users can seamlessly code together. It provides a platform for multiple users to enter a room, share a unique room ID, and collaborate on code simultaneously.
 
