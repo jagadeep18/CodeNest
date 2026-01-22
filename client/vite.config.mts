@@ -4,6 +4,9 @@ import { fileURLToPath, URL } from "url"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    server: {
+        allowedHosts: ['localhost', 'e87b20bc1ec1.ngrok-free.app','127.0.0.1', '*.ngrok-free.app', '*.ngrok.io','https://989afe46e9e3.ngrok-free.app', /^[\w-]+\.ngrok(?:-free)?\.app$/],
+    },
     plugins: [react()],
     build: {
         chunkSizeWarningLimit: 1600,
