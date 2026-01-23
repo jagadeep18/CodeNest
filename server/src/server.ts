@@ -16,9 +16,17 @@ const app = express()
 
 app.use(express.json())
 
+// CORS Configuration - Allow frontend from localhost and deployed domains
 app.use(cors({
-	origin: ["http://localhost:5173", "http://localhost:3000", /.*\.ngrok(?:-free)?\.app$/],
-	credentials: true
+	origin: [
+		"http://localhost:5173",      // Vite dev server
+		"http://localhost:3000",      // React dev server
+		/.*\.vercel\.app$/,           // Vercel deployed frontend
+		/.*\.ngrok(?:-free)?\.app$/   // ngrok tunnels
+	],
+	credentials: true,                // Allow cookies and authentication headers
+	methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allow all common HTTP methods
+	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"] // Allow common headers
 }))
 
 // Connect to MongoDB
@@ -33,7 +41,14 @@ app.use(express.static(path.join(__dirname, "public"))) // Serve static files
 const server = http.createServer(app)
 const io = new Server(server, {
 	cors: {
-		origin: "*",
+		origin: [
+			"http://localhost:5173",
+			"http://localhost:3000",
+			/.*\.vercel\.app$/,
+			/.*\.ngrok(?:-free)?\.app$/
+		],
+		credentials: true,
+		methods: ["GET", "POST"]
 	},
 	maxHttpBufferSize: 1e8,
 	pingTimeout: 60000,
@@ -273,7 +288,7 @@ io.on("connection", (socket) => {
 	})
 })
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 4000
 
 app.get("/", (req: Request, res: Response) => {
 	// Send the index.html file
