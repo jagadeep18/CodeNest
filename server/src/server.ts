@@ -21,6 +21,7 @@ app.use(cors({
 	origin: [
 		"http://localhost:5173",      // Vite dev server
 		"http://localhost:3000",      // React dev server
+		"https://dev-hub-delta-lyart.vercel.app", // Vercel production
 		/.*\.vercel\.app$/,           // Vercel deployed frontend
 		/.*\.ngrok(?:-free)?\.app$/   // ngrok tunnels
 	],
