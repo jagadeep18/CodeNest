@@ -16,32 +16,16 @@ const app = express()
 
 app.use(express.json())
 
-// CORS Configuration - Allow frontend from localhost and deployed domains
+// CORS Configuration - Allow ALL origins
 app.use(cors({
-	origin: function (origin, callback) {
-		// Allow requests with no origin (like mobile apps or curl requests)
-		if (!origin) return callback(null, true)
-
-		const allowedOrigins = [
-			"http://localhost:5173",
-			"http://localhost:3000",
-			"https://dev-hub-delta-lyart.vercel.app",
-		]
-
-		// Check if origin is in allowed list or matches Vercel pattern
-		if (allowedOrigins.includes(origin) ||
-			origin.endsWith('.vercel.app') ||
-			origin.includes('ngrok')) {
-			callback(null, true)
-		} else {
-			callback(null, true) // Allow all for now to debug
-		}
-	},
+	origin: true, // Accept all origins
 	credentials: true,
 	methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
 	exposedHeaders: ["Content-Range", "X-Content-Range"],
-	maxAge: 6604800 //  days (maximum recommended value)
+	maxAge: 604800,
+	preflightContinue: false,
+	optionsSuccessStatus: 204
 }))
 
 // Connect to MongoDB
