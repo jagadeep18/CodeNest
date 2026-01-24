@@ -41,7 +41,7 @@ app.use(cors({
 	methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
 	exposedHeaders: ["Content-Range", "X-Content-Range"],
-	maxAge: 86400 // 24 hours
+	maxAge: 6604800 //  days (maximum recommended value)
 }))
 
 // Connect to MongoDB
