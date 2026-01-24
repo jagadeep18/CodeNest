@@ -5,7 +5,12 @@ import User from "../models/User"
 import { generateToken, authMiddleware, AuthRequest } from "../middleware/auth"
 
 const router = Router()
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || "")
+
+// Log the client ID for debugging (only first/last few chars for security)
+const clientId = process.env.GOOGLE_CLIENT_ID || ""
+console.log("Google Client ID loaded:", clientId ? `${clientId.substring(0, 10)}...${clientId.substring(clientId.length - 10)}` : "NOT SET")
+
+const googleClient = new OAuth2Client(clientId)
 
 // Google Login
 router.post("/google-login", async (req: Request, res: Response) => {
@@ -16,10 +21,13 @@ router.post("/google-login", async (req: Request, res: Response) => {
 			return res.status(400).json({ message: "Token ID is required" })
 		}
 
+		console.log("Attempting to verify Google token...")
+		console.log("Expected audience (Client ID):", clientId)
+
 		// Verify the token with Google
 		const ticket = await googleClient.verifyIdToken({
 			idToken: tokenId,
-			audience: process.env.GOOGLE_CLIENT_ID,
+			audience: clientId,
 		})
 
 		const payload = ticket.getPayload()
@@ -60,6 +68,22 @@ router.post("/google-login", async (req: Request, res: Response) => {
 		})
 	} catch (error: unknown) {
 		console.error("Google login error:", error)
+
+		// Try to decode the token to see what audience it has
+		if (error instanceof Error && req.body.tokenId) {
+			try {
+				const tokenParts = req.body.tokenId.split('.')
+				if (tokenParts.length === 3) {
+					const payload = JSON.parse(Buffer.from(tokenParts[1], 'base64').toString())
+					console.error("Token payload audience (aud):", payload.aud)
+					console.error("Expected audience:", clientId)
+					console.error("Do they match?", payload.aud === clientId)
+				}
+			} catch (decodeError) {
+				console.error("Could not decode token for debugging:", decodeError)
+			}
+		}
+
 		res.status(500).json({ message: "Authentication failed" })
 	}
 })

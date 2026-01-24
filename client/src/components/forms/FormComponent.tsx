@@ -128,7 +128,7 @@ const FormComponent = () => {
     return (
         <div className="flex w-full max-w-[500px] flex-col items-center justify-center gap-4 p-4 sm:w-[500px] sm:p-8">
             <img src={logo} alt="Logo" className="w-full" />
-            
+
             {/* Google Login Section */}
             <div className="w-full space-y-4">
                 <p className="text-center text-sm text-gray-400">Sign in with Google</p>

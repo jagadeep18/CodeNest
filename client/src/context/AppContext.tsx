@@ -36,12 +36,12 @@ function AppContextProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         const savedToken = localStorage.getItem("authToken")
         const savedUser = localStorage.getItem("currentUser")
-        
+
         if (savedToken) {
             setAuthToken(savedToken)
             setIsAuthenticated(true)
         }
-        
+
         if (savedUser) {
             try {
                 setCurrentUser(JSON.parse(savedUser))
@@ -72,10 +72,10 @@ function AppContextProvider({ children }: { children: ReactNode }) {
         try {
             if (typeof window !== "undefined" && (window as any).google?.accounts?.id) {
                 try {
-                    ;(window as any).google.accounts.id.disableAutoSelect()
+                    ; (window as any).google.accounts.id.disableAutoSelect()
                     const email = currentUser?.email
                     if (email) {
-                        ;(window as any).google.accounts.id.revoke(email, () => {
+                        ; (window as any).google.accounts.id.revoke(email, () => {
                             console.log("Google account revoked")
                         })
                     }
@@ -87,8 +87,15 @@ function AppContextProvider({ children }: { children: ReactNode }) {
             console.error("Error checking Google sign-out:", e)
         }
 
+        // Clear all authentication data
         updateAuthToken(null)
         updateCurrentUser({ username: "", roomId: "" })
+
+        // Clear session storage
+        sessionStorage.clear()
+
+        // Reset status
+        setStatus(USER_STATUS.INITIAL)
     }
 
     return (

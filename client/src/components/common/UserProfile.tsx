@@ -1,17 +1,34 @@
 import { useAppContext } from "@/context/AppContext"
+import { useSocket } from "@/context/SocketContext"
+import { USER_STATUS } from "@/types/user"
 import { FaSignOutAlt } from "react-icons/fa"
 import { toast } from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 const UserProfile = () => {
-    const { currentUser, isAuthenticated, logout } = useAppContext()
+    const { currentUser, isAuthenticated, logout, setStatus } = useAppContext()
+    const { socket } = useSocket()
+    const navigate = useNavigate()
 
     if (!isAuthenticated) {
         return null
     }
 
     const handleLogout = () => {
+        // Disconnect socket
+        socket.disconnect()
+
+        // Clear authentication
         logout()
+
+        // Reset status
+        setStatus(USER_STATUS.DISCONNECTED)
+
+        // Show success message
         toast.success("Logged out successfully")
+
+        // Navigate to home/login page
+        navigate("/", { replace: true })
     }
 
     return (
