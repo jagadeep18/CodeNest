@@ -16,9 +16,42 @@ const app = express()
 
 app.use(express.json())
 
-// CORS Configuration - Allow ALL origins
+// CORS Configuration - Properly handle preflight requests
+const allowedOrigins = [
+	"http://localhost:5173",
+	"http://localhost:3000",
+	"https://dev-hub-delta-lyart.vercel.app",
+	/.*\.vercel\.app$/,
+	/.*\.ngrok(?:-free)?\.app$/
+]
+
+// CORS middleware with debugging
 app.use(cors({
-	origin: true, // Accept all origins
+	origin: function (origin, callback) {
+		console.log(`[CORS] Request from origin: ${origin}`)
+
+		// Allow requests with no origin (like mobile apps, curl, postman)
+		if (!origin) {
+			console.log('[CORS] No origin - allowing')
+			return callback(null, true)
+		}
+
+		// Check if origin is allowed
+		const isAllowed = allowedOrigins.some(allowed => {
+			if (typeof allowed === 'string') {
+				return allowed === origin
+			}
+			return allowed.test(origin)
+		})
+
+		if (isAllowed) {
+			console.log(`[CORS] Origin ${origin} is ALLOWED`)
+			callback(null, true)
+		} else {
+			console.log(`[CORS] Origin ${origin} is REJECTED`)
+			callback(new Error('Not allowed by CORS'))
+		}
+	},
 	credentials: true,
 	methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
@@ -27,6 +60,11 @@ app.use(cors({
 	preflightContinue: false,
 	optionsSuccessStatus: 204
 }))
+
+// CRITICAL: Handle OPTIONS requests for all routes (preflight)
+app.options("*", cors())
+
+console.log('[CORS] Allowed origins:', allowedOrigins)
 
 // Connect to MongoDB
 connectDB()
