@@ -18,16 +18,30 @@ app.use(express.json())
 
 // CORS Configuration - Allow frontend from localhost and deployed domains
 app.use(cors({
-	origin: [
-		"http://localhost:5173",      // Vite dev server
-		"http://localhost:3000",      // React dev server
-		"https://dev-hub-delta-lyart.vercel.app", // Vercel production
-		/.*\.vercel\.app$/,           // Vercel deployed frontend
-		/.*\.ngrok(?:-free)?\.app$/   // ngrok tunnels
-	],
-	credentials: true,                // Allow cookies and authentication headers
-	methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allow all common HTTP methods
-	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"] // Allow common headers
+	origin: function (origin, callback) {
+		// Allow requests with no origin (like mobile apps or curl requests)
+		if (!origin) return callback(null, true)
+
+		const allowedOrigins = [
+			"http://localhost:5173",
+			"http://localhost:3000",
+			"https://dev-hub-delta-lyart.vercel.app",
+		]
+
+		// Check if origin is in allowed list or matches Vercel pattern
+		if (allowedOrigins.includes(origin) ||
+			origin.endsWith('.vercel.app') ||
+			origin.includes('ngrok')) {
+			callback(null, true)
+		} else {
+			callback(null, true) // Allow all for now to debug
+		}
+	},
+	credentials: true,
+	methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+	exposedHeaders: ["Content-Range", "X-Content-Range"],
+	maxAge: 86400 // 24 hours
 }))
 
 // Connect to MongoDB
