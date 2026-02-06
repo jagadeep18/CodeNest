@@ -55,7 +55,7 @@ const GoogleLoginComponent = ({ onLoginSuccess }: { onLoginSuccess?: () => void 
 	const handleCredentialResponse = async (response: { credential: string }) => {
 		try {
 			const res = await axios.post(
-				`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/auth/google-login`,
+				`/api/auth/google-login`,
 				{ tokenId: response.credential }
 			)
 
