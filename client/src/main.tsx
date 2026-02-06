@@ -12,3 +12,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     // </React.StrictMode>
 )
 "// Deployment trigger $(date)"  
+"// Vercel redeploy trigger $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"  
