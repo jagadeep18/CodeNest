@@ -11,6 +11,24 @@ import {
 import toast from "react-hot-toast"
 import { useFileSystem } from "./FileContext"
 
+// Fallback languages in case Piston API is unavailable
+const FALLBACK_LANGUAGES: Language[] = [
+    { language: "javascript", version: "18.15.0", aliases: ["js", "javascript"] },
+    { language: "typescript", version: "5.0.3", aliases: ["ts", "typescript"] },
+    { language: "python", version: "3.10.0", aliases: ["py", "python"] },
+    { language: "java", version: "15.0.2", aliases: ["java"] },
+    { language: "cpp", version: "10.2.0", aliases: ["cpp", "c++"] },
+    { language: "c", version: "10.2.0", aliases: ["c"] },
+    { language: "csharp", version: "6.12.0", aliases: ["cs", "csharp"] },
+    { language: "go", version: "1.16.2", aliases: ["go", "golang"] },
+    { language: "rust", version: "1.68.2", aliases: ["rs", "rust"] },
+    { language: "ruby", version: "3.0.1", aliases: ["rb", "ruby"] },
+    { language: "php", version: "8.2.3", aliases: ["php"] },
+    { language: "swift", version: "5.3.3", aliases: ["swift"] },
+    { language: "kotlin", version: "1.8.20", aliases: ["kt", "kotlin"] },
+    { language: "typescript", version: "5.0.3", aliases: ["ts"] },
+]
+
 const RunCodeContext = createContext<RunContextType | null>(null)
 
 export const useRunCode = () => {
@@ -41,8 +59,8 @@ const RunCodeContextProvider = ({ children }: { children: ReactNode }) => {
                 const languages = await axiosInstance.get("/runtimes")
                 setSupportedLanguages(languages.data)
             } catch (error: any) {
-                toast.error("Failed to fetch supported languages")
-                if (error?.response?.data) console.error(error?.response?.data)
+                console.warn("Piston API unavailable, using fallback languages")
+                setSupportedLanguages(FALLBACK_LANGUAGES)
             }
         }
 
@@ -92,11 +110,15 @@ const RunCodeContextProvider = ({ children }: { children: ReactNode }) => {
             setIsRunning(false)
             toast.dismiss()
         } catch (error: any) {
-            console.error(error.response.data)
-            console.error(error.response.data.error)
+            console.error(error.response?.data || error)
             setIsRunning(false)
             toast.dismiss()
-            toast.error("Failed to run the code")
+            // Show helpful message for code execution errors
+            if (error.code === 'ERR_NETWORK' || error.message.includes('Network')) {
+                toast.error("Code execution service unavailable. Check your connection.")
+            } else {
+                toast.error("Failed to run the code")
+            }
         }
     }
 
