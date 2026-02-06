@@ -65,6 +65,18 @@ const FormComponent = () => {
         }
     }, [currentUser, location.state?.roomId, setCurrentUser]);
 
+    // Auto-redirect authenticated users to editor
+    useEffect(() => {
+        if (isAuthenticated && authToken && status === USER_STATUS.DISCONNECTED) {
+            // Auto-create room and redirect
+            const newRoomId = uuidv4();
+            setCurrentUser({ ...currentUser, roomId: newRoomId });
+            toast.loading('Creating your workspace...');
+            setStatus(USER_STATUS.ATTEMPTING_JOIN);
+            socket.emit(SocketEvent.JOIN_REQUEST, { ...currentUser, roomId: newRoomId });
+        }
+    }, [isAuthenticated, authToken, status, currentUser, setCurrentUser, socket]);
+
     useEffect(() => {
         if (status === USER_STATUS.DISCONNECTED && !socket.connected) {
             socket.connect();
@@ -120,6 +132,19 @@ const FormComponent = () => {
                     onClick={createNewRoomId}
                 >
                     Generate Unique Room Id
+                </button>
+                <button
+                    className="mt-4 cursor-pointer select-none rounded-md bg-primary px-6 py-2 font-semibold text-black"
+                    onClick={() => {
+                        // Auto-create room and redirect
+                        const newRoomId = uuidv4();
+                        setCurrentUser({ ...currentUser, roomId: newRoomId });
+                        toast.loading('Creating your workspace...');
+                        setStatus(USER_STATUS.ATTEMPTING_JOIN);
+                        socket.emit(SocketEvent.JOIN_REQUEST, { ...currentUser, roomId: newRoomId });
+                    }}
+                >
+                    Create New Workspace
                 </button>
             </div>
         );
