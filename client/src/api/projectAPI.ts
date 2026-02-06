@@ -1,6 +1,7 @@
 import axios from "axios"
 
-const API_URL = import.meta.env.VITE_API_URL;
+// Use relative URL for API calls - Vercel will proxy /api/* to backend
+const API_URL = ""; 
 
 export const projectAPI = {
     // Save a project
@@ -15,35 +16,35 @@ export const projectAPI = {
         },
         token: string
     ) => {
-        return axios.post(`${API_URL}/api/projects/save`, projectData, {
+        return axios.post(`/api/projects/save`, projectData, {
             headers: { Authorization: `Bearer ${token}` },
         })
     },
 
     // Get all projects
     getProjects: async (token: string) => {
-        return axios.get(`${API_URL}/api/projects/list`, {
+        return axios.get(`/api/projects/list`, {
             headers: { Authorization: `Bearer ${token}` },
         })
     },
 
     // Get a specific project
     getProject: async (projectId: string, token: string) => {
-        return axios.get(`${API_URL}/api/projects/${projectId}`, {
+        return axios.get(`/api/projects/${projectId}`, {
             headers: { Authorization: `Bearer ${token}` },
         })
     },
 
     // Get project by room ID
     getProjectByRoom: async (roomId: string, token: string) => {
-        return axios.get(`${API_URL}/api/projects/room/${roomId}`, {
+        return axios.get(`/api/projects/room/${roomId}`, {
             headers: { Authorization: `Bearer ${token}` },
         })
     },
 
     // Delete a project
     deleteProject: async (projectId: string, token: string) => {
-        return axios.delete(`${API_URL}/api/projects/${projectId}`, {
+        return axios.delete(`/api/projects/${projectId}`, {
             headers: { Authorization: `Bearer ${token}` },
         })
     },
@@ -54,7 +55,7 @@ export const projectAPI = {
         drawingData: Record<string, unknown>,
         token: string
     ) => {
-        return axios.patch(`${API_URL}/api/projects/${projectId}/drawing`, { drawingData }, {
+        return axios.patch(`/api/projects/${projectId}/drawing`, { drawingData }, {
             headers: { Authorization: `Bearer ${token}` },
         })
     },

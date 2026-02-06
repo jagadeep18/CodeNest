@@ -56,10 +56,14 @@ Vercel is connected to your GitHub repository and will **automatically deploy** 
 Set these in Vercel Dashboard → Settings → Environment Variables:
 
 ```env
-VITE_API_URL=https://dev-hub-backend-latest.onrender.com
+# VITE_BACKEND_URL - Still needed for WebSocket connections
 VITE_BACKEND_URL=https://dev-hub-backend-latest.onrender.com
+
+# VITE_GOOGLE_CLIENT_ID - Google OAuth Client ID
 VITE_GOOGLE_CLIENT_ID=656840032038-9tcp1pmsagbvkjm233pv5qth1nm1cou6.apps.googleusercontent.com
 ```
+
+> **Note**: `VITE_API_URL` is no longer needed. API calls use relative URLs (`/api/*`) which are proxied to the backend by Vercel's configuration.
 
 ### Manual Deployment (if needed)
 ```bash
@@ -133,6 +137,23 @@ Render is connected to your GitHub repository and will **automatically deploy** 
 
 ## 4. Complete Deployment Workflow
 
+### Single URL Architecture
+
+Your application now uses a **single URL** for both frontend and backend:
+
+```
+https://dev-hub-delta-lyart.vercel.app
+                    │
+                    ├── / (Frontend - React app)
+                    ├── /api/* (Proxied to backend → https://dev-hub-backend-latest.onrender.com)
+                    └── Socket.IO (WebSocket - direct connection)
+```
+
+**How it works:**
+1. **Frontend**: Served directly from Vercel's edge network
+2. **REST API**: Vercel proxies `/api/*` requests to the Render backend
+3. **WebSocket**: Direct connection to Render backend (different protocol)
+
 ### Step-by-Step Process
 
 #### 1. Commit and Push Changes
@@ -162,8 +183,8 @@ git push origin main
 - **Render**: Check deployment logs at https://dashboard.render.com
 
 #### 4. Verify Deployment
-- **Frontend**: https://dev-hub-delta-lyart.vercel.app
-- **Backend**: https://dev-hub-backend-latest.onrender.com
+- **Frontend & API**: https://dev-hub-delta-lyart.vercel.app
+- **WebSocket**: https://dev-hub-backend-latest.onrender.com
 - **Health Check**: Visit backend URL to see if server responds
 
 ---
@@ -256,6 +277,8 @@ git push origin main
 ✅ **GitHub**: Repository configured at `https://github.com/jagadeep18/dev-hub.git`  
 ✅ **Vercel**: Auto-deploys frontend from `client/` directory  
 ✅ **Render**: Auto-deploys backend using Docker from root `Dockerfile`  
+✅ **Single URL**: Both frontend and API accessible at `https://dev-hub-delta-lyart.vercel.app`
+✅ **API Proxy**: Vercel proxies `/api/*` requests to Render backend
 ✅ **Docker**: Optimized for TypeScript build and Node.js runtime  
 
 **Next Step**: Push your changes to GitHub to trigger automatic deployments! 🚀
