@@ -22,7 +22,9 @@ const allowedOrigins = [
 	"http://localhost:3000",
 	"https://dev-hub-delta-lyart.vercel.app",
 	/.*\.vercel\.app$/,
-	/.*\.ngrok(?:-free)?\.app$/
+	/.*\.ngrok(?:-free)?\.app$/,
+	/^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
+	/^http:\/\/10\.\d+\.\d+\.\d+(:\d+)?$/
 ]
 
 // CORS middleware with debugging
@@ -82,7 +84,9 @@ const io = new Server(server, {
 			"http://localhost:5173",
 			"http://localhost:3000",
 			/.*\.vercel\.app$/,
-			/.*\.ngrok(?:-free)?\.app$/
+			/.*\.ngrok(?:-free)?\.app$/,
+			/^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
+			/^http:\/\/10\.\d+\.\d+\.\d+(:\d+)?$/
 		],
 		credentials: true,
 		methods: ["GET", "POST"]

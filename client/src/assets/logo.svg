@@ -24,9 +24,9 @@
     <circle cx="40" cy="40" r="8" fill="#00FF7F" />
   </g>
 
-  <!-- Main Text: DevHub -->
-  <text x="130" y="70" fill="#FFFFFF" font-size="40" font-family="Arial, sans-serif">Dev</text>
-  <text x="230" y="70" fill="#00FF7F" font-size="40" font-family="Arial, sans-serif">Hub</text>
+  <!-- Main Text: CodeNest -->
+  <text x="130" y="70" fill="#FFFFFF" font-size="40" font-family="Arial, sans-serif">Code</text>
+  <text x="220" y="70" fill="#00FF7F" font-size="40" font-family="Arial, sans-serif">Nest</text>
 
   <!-- Tagline: Code, Create and Collaborate -->
   <text x="130" y="110" fill="#FFFFFF" font-size="18" font-family="Arial, sans-serif">

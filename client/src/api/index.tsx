@@ -1,9 +1,9 @@
 import axios, { AxiosInstance } from "axios"
 
-const pistonBaseUrl = "https://emkc.org/api/v2/piston"
+const wandboxBaseUrl = "https://wandbox.org/api"
 
 const instance: AxiosInstance = axios.create({
-    baseURL: pistonBaseUrl,
+    baseURL: wandboxBaseUrl,
     headers: {
         "Content-Type": "application/json",
     },

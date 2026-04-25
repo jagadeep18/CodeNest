@@ -27,7 +27,8 @@ export const useSocket = (): SocketContextType => {
     return context;
 };
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ||
+    `http://${window.location.hostname}:4000`;
 
 const SocketProvider = ({ children }: { children: ReactNode }) => {
     const {

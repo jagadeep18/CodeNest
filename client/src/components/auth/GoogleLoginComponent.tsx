@@ -53,9 +53,13 @@ const GoogleLoginComponent = ({ onLoginSuccess }: { onLoginSuccess?: () => void 
 	}, [googleClientId])
 
 	const handleCredentialResponse = async (response: { credential: string }) => {
+		const backendUrl = import.meta.env.VITE_BACKEND_URL ||
+			(window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+				? ""
+				: `http://${window.location.hostname}:4000`)
 		try {
 			const res = await axios.post(
-				`/api/auth/google-login`,
+				`${backendUrl}/api/auth/google-login`,
 				{ tokenId: response.credential }
 			)
 

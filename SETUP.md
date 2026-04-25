@@ -43,7 +43,7 @@ mongod
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/code-sync
 # Or for MongoDB Atlas:
-MONGODB_URI=mongodb://localhost:27017/dev-hub
+MONGODB_URI=mongodb://localhost:27017/codenest
 
 # MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dev-hub
 JWT_SECRET=your-secret-jwt-key-generate-a-random-string
