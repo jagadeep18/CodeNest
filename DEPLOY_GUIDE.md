@@ -111,9 +111,9 @@ Sign up with your GitHub account.
 
 In the Vercel project → **"Settings"** → **"Environment Variables"** → Add:
 
-| Key                   | Value                                                                       |
+| Key                   | Value                                                                       | 
 |-----------------------|-----------------------------------------------------------------------------|
-| `VITE_BACKEND_URL`    | `https://dev-hub-backend.onrender.com`  ← your Render backend URL           |
+| `VITE_BACKEND_URL`    | `https://dev-hub-backend-4c2p.onrender.com`  ← your Render backend URL           |
 | `VITE_GOOGLE_CLIENT_ID` | `656840032038-9tcp1pmsagbvkjm233pv5qth1nm1cou6.apps.googleusercontent.com` |
 
 ---

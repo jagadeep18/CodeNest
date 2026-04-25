@@ -20,7 +20,7 @@ app.use(express.json())
 const allowedOrigins = [
 	"http://localhost:5173",
 	"http://localhost:3000",
-	"https://dev-hub-delta-lyart.vercel.app",
+	"https://codenest-bice.vercel.app",
 	/.*\.vercel\.app$/,
 	/.*\.ngrok(?:-free)?\.app$/,
 	/^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
@@ -83,6 +83,7 @@ const io = new Server(server, {
 		origin: [
 			"http://localhost:5173",
 			"http://localhost:3000",
+			"https://codenest-bice.vercel.app",
 			/.*\.vercel\.app$/,
 			/.*\.ngrok(?:-free)?\.app$/,
 			/^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
